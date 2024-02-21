@@ -16,8 +16,8 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  Future<List<Borrow>> getHist() async {
-    var url = Uri.http('192.168.56.1:3000', "/borrows/hist/${info.mUser}");
+  Future<List<Borrow>> getHist({String? hist}) async {
+    var url = Uri.http('192.168.56.1:3000', "/borrows/hist/${hist}");
     var response = await http.get(url);
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = jsonDecode(response.body);
@@ -37,14 +37,14 @@ class _HistoryPageState extends State<HistoryPage> {
     setState(() {
       info = infos;
     });
+    setState(() async {
+      _hist = getHist(hist: info.mUser);
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      _hist = getHist();
-    });
     getInfo();
   }
 
